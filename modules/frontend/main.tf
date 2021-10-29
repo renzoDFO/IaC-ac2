@@ -29,6 +29,9 @@ resource "aws_security_group" "frontend" {
     Name = "${var.namespace}-ssh"
   }
 }
+output "security_group_id" {
+  value = aws_security_group.frontend.id
+}
 
 // EC2
 // busco en aws por filtro la versión disponible (aws educate solo deja una)
@@ -75,14 +78,9 @@ resource "aws_instance" "instance" {
     }
   }
 }
-
-// Outputs
 output "public_ip" {
   value = aws_instance.instance.public_ip
 }
 output "private_ip" {
   value = aws_instance.instance.private_ip
-}
-output "security_group_id" {
-  value = aws_security_group.frontend.id
 }

@@ -68,3 +68,17 @@ module "backend" {
   frontend_security_group_name = module.frontend.security_group_id
   private_key_name = local.private_key_name
 }
+
+// Outputs
+output "public_connection_string" {
+  description = "Copy/Paste/Enter - SSH Backend"
+  value = "ssh -i ${local.private_key_name}.pem ec2-user@${module.backend.public_ip}"
+}
+output "frontend_connection_string" {
+  description = "Copy/Paste/Enter - Desde Backend"
+  value = "ssh -i ${local.private_key_name}.pem ec2-user@${module.frontend.private_ip}"
+}
+output "database_connection_string" {
+  description = "Copy/Paste/Enter - Desde backend"
+  value = "ssh -i ${local.private_key_name}.pem ec2-user@${module.frontend.private_ip}"
+}

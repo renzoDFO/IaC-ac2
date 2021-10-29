@@ -16,7 +16,7 @@ resource "aws_security_group" "backend" {
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-    security_groups = []
+    security_groups = [var.frontend_security_group_name]
   }
   egress {
     description = "Egress total"

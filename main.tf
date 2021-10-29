@@ -56,7 +56,10 @@ module "frontend" {
   private_key_name = local.private_key_name
 }
 module "database" {
-  source = ""
+  source = "./modules/database"
+  namespace = var.namespace
+  vpc = module.vpc
+  private_key_name = local.private_key_name
 }
 module "backend" {
   source = "./modules/backend"

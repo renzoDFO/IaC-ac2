@@ -12,6 +12,8 @@ module "vpc" {
   azs = data.aws_availability_zones.available.names
   public_subnets = [
     "10.0.101.0/24"]
+  private_subnets = [
+    "10.0.1.0/24"]
   tags = {
     name = "${var.namespace}-vpc"
   }

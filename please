@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#ssh root@pivot.blackcatdesarrollos.online 'docker run -i -t docker.io/hashicorp/terraform version'
+
+export TF_VAR_do_token=$(cat ~/Desktop/git-repo/DO_TOKEN)
+SSH="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+function getHostname() {
+  terraform output -raw www
+}
+
+function apply() {
+  terraform init -reconfigure
+  terraform plan -out=plan.js
+  terraform apply plan.js
+  sleep 60
+  echo "HOSTNAME: $(getHostname)"
+}
+
+function destroy() {
+  terraform destroy -auto-approve
+}
+
+function up() {
+    cat initScripts/up-script.sh | $SSH root@$(getHostname) /bin/bash
+}
+function down() {
+    cat initScripts/down-script.sh | $SSH root@$(getHostname) /bin/bash
+}
+
+function connect() {
+    $SSH root@$(getHostname)
+}
+
+case "$1" in
+app)
+  apply
+  exit 0
+  ;;
+des)
+  destroy
+  ;;
+up)
+  apply
+  up
+  ;;
+down)
+  down
+  ;;
+connect)
+  connect
+  ;;
+*)
+  echo "Usage: $0 {apply|destroy}"
+  ;;
+esac

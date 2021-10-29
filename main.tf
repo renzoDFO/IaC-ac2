@@ -29,6 +29,10 @@ module "networking" {
   source = "./modules/networking"
   namespace = var.namespace
 }
+module "ssh" {
+  source = "./modules/ssh_key"
+  namespace = var.namespace
+}
 //module "database" {
 //  depends_on = [module.networking]
 //  vpc = module.networking.vpc_output

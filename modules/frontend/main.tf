@@ -27,7 +27,7 @@ resource "aws_security_group" "frontend" {
       "0.0.0.0/0"]
   }
   tags = {
-    Name = "${var.namespace}-ssh"
+    Name = "${var.namespace}-frontend-sg"
   }
 }
 output "security_group_id" {

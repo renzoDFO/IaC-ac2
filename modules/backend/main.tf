@@ -27,7 +27,7 @@ resource "aws_security_group" "backend" {
       "0.0.0.0/0"]
   }
   tags = {
-    Name = "${var.namespace}-ssh"
+    Name = "${var.namespace}-backend-sg"
   }
 }
 

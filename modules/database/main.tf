@@ -28,7 +28,7 @@ resource "aws_security_group" "database" {
       "0.0.0.0/0"]
   }
   tags = {
-    Name = "${var.namespace}-ssh"
+    Name = "${var.namespace}-database-sg"
   }
 }
 

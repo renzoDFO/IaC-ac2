@@ -1,10 +1,10 @@
 // SG
-resource "aws_security_group" "backend" {
-  name = "${var.namespace}-backend"
+resource "aws_security_group" "database" {
+  name = "${var.namespace}-database"
   description = "inbound de ssh tipo publico"
   vpc_id = var.vpc.vpc_id
   ingress {
-    description = "SSH desde todo internet"
+    description = "SSH desde mi database"
     from_port = 22
     to_port = 22
     protocol = "tcp"
@@ -12,9 +12,9 @@ resource "aws_security_group" "backend" {
       "0.0.0.0/0"]
   }
   ingress {
-    description = "8080 desde mi frontend"
-    from_port = 8080
-    to_port = 8080
+    description = "27017 desde mi frontend"
+    from_port = 27017
+    to_port = 27017
     protocol = "tcp"
     security_groups = []
   }
@@ -49,9 +49,9 @@ resource "aws_instance" "instance" {
   instance_type = "t2.micro"
   subnet_id = var.vpc.private_subnets[0]
   vpc_security_group_ids = [
-    aws_security_group.backend.id]
+    aws_security_group.database.id]
   tags = {
-    "Name" = "${var.namespace}-EC2-BACKEND"
+    "Name" = "${var.namespace}-EC2-FRONTEND"
   }
   # Copio la clave SSH a home de ec2user
   provisioner "file" {
@@ -74,6 +74,19 @@ resource "aws_instance" "instance" {
       private_key = file("${var.private_key_name}.pem")
       host = self.public_ip
     }
+  }
+}
+
+resource "aws_instance" "ec2_private" {
+  ami = data.aws_ami.amazon-linux-2.id
+  associate_public_ip_address = false
+  instance_type = "t2.micro"
+  key_name = var.private_key_name
+  subnet_id = var.vpc.private_subnets[1]
+  vpc_security_group_ids = [
+    aws_security_group.database.id]
+  tags = {
+    "Name" = "${var.namespace}-EC2-DATABASE"
   }
 }
 

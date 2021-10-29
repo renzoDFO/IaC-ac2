@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#ssh root@pivot.blackcatdesarrollos.online 'docker run -i -t docker.io/hashicorp/terraform version'
 
 SSH="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 function apply() {

@@ -4,24 +4,13 @@ variable "namespace" {
 }
 
 // VPC
-data "aws_availability_zones" "available" {}
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-  name = "${var.namespace}-vpc"
-  cidr = "10.0.0.0/16"
-  azs = data.aws_availability_zones.available.names
-  public_subnets = [
-    "10.0.101.0/24"]
-  private_subnets = [
-    "10.0.1.0/24"]
-  tags = {
-    name = "${var.namespace}-vpc"
-  }
-}
+
 output "vpc_output" {
   value = module.vpc
 }
-
+output "vpc_id" {
+  value = module.vpc.default_vpc_id
+}
 //// PUB ssh, publica :80 IN frontend OUT *
 //resource "aws_security_group" "PUB" {
 //  name = ""

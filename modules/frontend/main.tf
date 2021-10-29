@@ -1,6 +1,6 @@
 // SG
-resource "aws_security_group" "backend" {
-  name = "${var.namespace}-backend"
+resource "aws_security_group" "frontend" {
+  name = "${var.namespace}-frontend"
   description = "inbound de ssh tipo publico"
   vpc_id = var.vpc.vpc_id
   ingress {
@@ -48,7 +48,7 @@ resource "aws_instance" "instance" {
   instance_type = "t2.micro"
   subnet_id = var.vpc.public_subnets[0]
   vpc_security_group_ids = [
-    aws_security_group.backend.id]
+    aws_security_group.frontend.id]
   tags = {
     "Name" = "${var.namespace}-EC2-FRONTEND"
   }
@@ -82,4 +82,7 @@ output "public_ip" {
 }
 output "private_ip" {
   value = aws_instance.instance.private_ip
+}
+output "security_group_id" {
+  value = aws_security_group.frontend.id
 }

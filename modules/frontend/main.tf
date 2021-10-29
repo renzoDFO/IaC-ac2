@@ -4,19 +4,20 @@ resource "aws_security_group" "frontend" {
   description = "inbound de ssh tipo publico"
   vpc_id = var.vpc.vpc_id
   ingress {
-    description = "SSH desde todo internet"
+    description = "SSH desde mi backend"
     from_port = 22
     to_port = 22
     protocol = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"]
+      "10.0.1.0/16"]
   }
   ingress {
-    description = "8080 desde mi frontend"
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-    security_groups = []
+    description = "80 desde internet"
+    from_port = 80
+    to_port = 80
+    protocol = "http"
+    security_groups = [
+      "0.0.0.0/0"]
   }
   egress {
     from_port = 0

@@ -25,7 +25,6 @@ variable "namespace" {
   type = string
 }
 
-
 // Setup
 data "aws_availability_zones" "available" {}
 module "vpc" {
@@ -56,11 +55,9 @@ module "frontend" {
   vpc = module.vpc
   private_key_name = local.private_key_name
 }
-//module "database" {
-//  depends_on = [module.networking]
-//  vpc = module.networking.vpc_output
-//  source = ""
-//}
+module "database" {
+  source = ""
+}
 module "backend" {
   source = "./modules/backend"
   namespace = var.namespace

@@ -64,7 +64,7 @@ resource "aws_instance" "instance" {
       host = self.public_ip
     }
   }
-  // le reduzco los permisos a solo lectura por el owner
+  // le reduzco los permisos
   provisioner "remote-exec" {
     inline = [
       "chmod 400 /home/ec2-user/${var.private_key_name}.pem"]

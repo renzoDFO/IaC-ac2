@@ -49,6 +49,7 @@ data "aws_ami" "amazon-linux-2" {
 resource "aws_instance" "instance" {
   ami = data.aws_ami.amazon-linux-2.id
   associate_public_ip_address = true
+  key_name = var.private_key_name
   instance_type = "t2.micro"
   subnet_id = var.vpc.public_subnets[0]
   vpc_security_group_ids = [
@@ -56,10 +57,10 @@ resource "aws_instance" "instance" {
   tags = {
     "Name" = "${var.namespace}-EC2-FRONTEND"
   }
-  # Copio la clave SSH a home de ec2user
+  # Init Script
   provisioner "file" {
-    source = "./${var.private_key_name}-key.pem"
-    destination = "/home/ec2-user/${var.private_key_name}.pem"
+    source = "./init.script"
+    destination = "/home/ec2-user/init.script"
     connection {
       type = "ssh"
       user = "ec2-user"
@@ -67,10 +68,11 @@ resource "aws_instance" "instance" {
       host = self.public_ip
     }
   }
-  // le reduzco los permisos a solo lectura por el owner
+  // Le añado permisos & ejecuto el init script
   provisioner "remote-exec" {
     inline = [
-      "chmod 400 /home/ec2-user/${var.private_key_name}.pem"]
+      "chmod 400 /home/ec2-user/init.script",
+      "/bin/sh /home/ec2-user/init.script"]
     connection {
       type = "ssh"
       user = "ec2-user"
@@ -79,6 +81,7 @@ resource "aws_instance" "instance" {
     }
   }
 }
+
 output "public_ip" {
   value = aws_instance.instance.public_ip
 }

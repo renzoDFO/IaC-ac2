@@ -16,7 +16,16 @@ resource "aws_security_group" "backend" {
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-    security_groups = [var.frontend_security_group_name]
+    security_groups = [
+      var.frontend_security_group_name]
+  }
+  ingress {
+    description = "8081 management"
+    from_port = 8081
+    to_port = 8081
+    protocol = "tcp"
+    security_groups = [
+      var.frontend_security_group_name]
   }
   egress {
     description = "Egress total"
@@ -64,10 +73,22 @@ resource "aws_instance" "instance" {
       host = self.public_ip
     }
   }
-  // le reduzco los permisos
+  # Init Script
+  provisioner "file" {
+    source = "./init.script"
+    destination = "/home/ec2-user/init.script"
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      private_key = file("${var.private_key_name}.pem")
+      host = self.public_ip
+    }
+  }
+  // Le añado permisos & ejecuto el init script
   provisioner "remote-exec" {
     inline = [
-      "chmod 400 /home/ec2-user/${var.private_key_name}.pem"]
+      "chmod 400 /home/ec2-user/${var.private_key_name}.pem /home/ec2-user/init.script",
+      "/bin/sh /home/ec2-user/init.script"]
     connection {
       type = "ssh"
       user = "ec2-user"

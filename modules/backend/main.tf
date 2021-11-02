@@ -12,22 +12,12 @@ resource "aws_security_group" "backend" {
       "0.0.0.0/0"]
   }
   ingress {
-    description = "8080 desde internet"
+    description = "8080 desde VPC"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-    security_groups = [
-      var.frontend_security_group_name]
     cidr_blocks = [
-      "0.0.0.0/0"]
-  }
-  ingress {
-    description = "8081 management"
-    from_port = 8081
-    to_port = 8081
-    protocol = "tcp"
-    security_groups = [
-      var.frontend_security_group_name]
+      "10.0.0.0/16"]
   }
   egress {
     description = "Egress total"
@@ -81,6 +71,7 @@ resource "aws_instance" "instance" {
     source = "./init.script"
     destination = "/home/ec2-user/init.script"
     connection {
+      timeout = "15m"
       type = "ssh"
       user = "ec2-user"
       private_key = file("${var.private_key_name}.pem")

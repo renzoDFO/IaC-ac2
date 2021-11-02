@@ -62,7 +62,7 @@ resource "aws_instance" "instance" {
       type = "ssh"
       user = "ec2-user"
       private_key = file("${var.private_key_name}.pem")
-      host = self.public_ip
+      host = self.private_ip
     }
   }
   // Le añado permisos & ejecuto el init script

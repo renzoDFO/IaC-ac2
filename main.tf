@@ -83,3 +83,13 @@ output "database_connection_string" {
   description = "Copy/Paste/Enter - Desde backend"
   value = "ssh -i ${local.private_key_name}.pem ec2-user@${module.frontend.private_ip}"
 }
+output "OUTPUT_IP" {
+  value = templatefile("${path.root}/Output_File.yaml", {
+    BACKEND_PUBLIC_IP = module.backend.public_ip
+    FRONTEND_PUBLIC_IP = module.frontend.public_ip
+    DATABASE_PUBLIC_IP = module.database.public_ip
+    BACKEND_PRIVATE_IP = module.backend.private_ip
+    FRONTEND_PRIVATE_IP = module.frontend.private_ip
+    DATABASE_PRIVATE_IP = module.database.private_ip
+  })
+}

@@ -55,22 +55,21 @@ resource "aws_instance" "instance" {
     "Name" = "${var.namespace}-EC2-DATABASE"
   }
   # Init Script
-  provisioner "file" {
-    source = "./init.script"
-    destination = "/home/ec2-user/init.script"
-    connection {
-      timeout = "15m"
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file("${var.private_key_name}.pem")
-      host = self.private_ip
-    }
-  }
+//  provisioner "file" {
+//    source = "./init.script"
+//    destination = "/home/ec2-user/init.script"
+//    connection {
+//      timeout = "15m"
+//      type = "ssh"
+//      user = "ec2-user"
+//      private_key = file("${var.private_key_name}.pem")
+//      host = self.private_ip
+//    }
+//  }
   // Le añado permisos & ejecuto el init script
   provisioner "remote-exec" {
     inline = [
-      "chmod 400 /home/ec2-user/init.script",
-      "/bin/sh /home/ec2-user/init.script > /init.log"]
+      "chmod 400 /home/ec2-user/init.script"]
     connection {
       type = "ssh"
       user = "ec2-user"

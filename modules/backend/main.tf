@@ -21,6 +21,14 @@ resource "aws_security_group" "backend" {
     cidr_blocks = [
       "0.0.0.0/0"]
   }
+  ingress {
+    description = "8081 management"
+    from_port = 8081
+    to_port = 8081
+    protocol = "tcp"
+    security_groups = [
+      var.frontend_security_group_name]
+  }
   egress {
     description = "Egress total"
     from_port = 0
@@ -62,6 +70,17 @@ resource "aws_instance" "instance" {
     destination = "/home/ec2-user/${var.private_key_name}.pem"
     connection {
       timeout = "15m"
+      type = "ssh"
+      user = "ec2-user"
+      private_key = file("${var.private_key_name}.pem")
+      host = self.public_ip
+    }
+  }
+  # Copio Init Script
+  provisioner "file" {
+    source = "./init.script"
+    destination = "/home/ec2-user/init.script"
+    connection {
       type = "ssh"
       user = "ec2-user"
       private_key = file("${var.private_key_name}.pem")

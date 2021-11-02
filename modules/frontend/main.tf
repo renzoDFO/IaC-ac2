@@ -52,7 +52,7 @@ resource "aws_instance" "instance" {
   key_name = var.private_key_name
   instance_type = "t2.micro"
   subnet_id = var.vpc.public_subnets[0]
-  vpc_security_group_ids = [
+  security_groups = [
     aws_security_group.frontend.id]
   tags = {
     "Name" = "${var.namespace}-EC2-FRONTEND"

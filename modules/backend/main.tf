@@ -49,7 +49,7 @@ resource "aws_instance" "instance" {
   associate_public_ip_address = true
   instance_type = "t2.micro"
   subnet_id = var.vpc.private_subnets[0]
-  vpc_security_group_ids = [
+  security_groups = [
     aws_security_group.backend.id]
   tags = {
     "Name" = "${var.namespace}-EC2-BACKEND"

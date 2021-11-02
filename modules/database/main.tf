@@ -49,7 +49,7 @@ resource "aws_instance" "instance" {
   instance_type = "t2.micro"
   key_name = var.private_key_name
   subnet_id = var.vpc.private_subnets[0]
-  vpc_security_group_ids = [
+  security_groups = [
     aws_security_group.database.id]
   tags = {
     "Name" = "${var.namespace}-EC2-DATABASE"

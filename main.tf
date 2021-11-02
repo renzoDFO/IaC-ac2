@@ -50,10 +50,12 @@ locals {
 }
 // Deployments
 module "frontend" {
+  depends_on = [module.backend]
   source = "./modules/frontend"
   namespace = var.namespace
   vpc = module.vpc
   private_key_name = local.private_key_name
+  backend_ip = module.backend.public_ip
 }
 module "database" {
   source = "./modules/database"

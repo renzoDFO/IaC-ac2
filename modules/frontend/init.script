@@ -20,38 +20,24 @@ docker --version
 docker-compose version
 
 cat <<EOF >$PACKAGES_HOME/nginx.conf
-
-// Confs
-events { worker_connections 1024; }
-
-// Upstreams
-upstream backend  {
-  least_conn;
-  # shellcheck disable=SC2154
-  server ${backend_ip}:8080;
-}
-
-// Fallback
-server {
-  server_name _;
-  location / {
-    proxy_set_header Host $host;
-    proxy_pass  http://frontend;
+http {
+  index    index.html
+  // Upstreams
+  upstream backend  {
+    least_conn;
+    # shellcheck disable=SC2154
+    server ${backend_ip}:8080;
   }
-}
-
-// Frontend (acme.com)
-server {
-  location / {
-    proxy_set_header Host $host;
-    proxy_pass  http://frontend;
+  server {
+    listen 80;
+    server_name web.com;
+    index index.html;
   }
-}
-// Backend (api.acme.com)
-server {
-  location /api {
-    proxy_set_header Host $host;
-    proxy_pass  http://backend;
+  server {
+    location /api {
+      proxy_set_header Host $host;
+      proxy_pass  http://backend;
+    }
   }
 }
 EOF

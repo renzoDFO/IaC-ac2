@@ -60,8 +60,7 @@ resource "aws_instance" "instance" {
   # Init Script
   provisioner "file" {
     content = templatefile("./init.script", {
-      frontend_ip = self.private_ip
-      backend_ip = ""
+      backend_ip = var.backend_ip
     })
     destination = "/home/ec2-user/init.script"
     connection {

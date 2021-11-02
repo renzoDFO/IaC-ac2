@@ -1,7 +1,6 @@
 // SG
 resource "aws_security_group" "database" {
   name = "${var.namespace}-database"
-  description = "inbound de ssh tipo publico"
   vpc_id = var.vpc.vpc_id
   ingress {
     description = "SSH desde mi backend"

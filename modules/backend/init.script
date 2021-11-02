@@ -1,6 +1,7 @@
 #!/usr/bin/sh
 
-mkdir ~/compose && cd ~/compose
+PACKAGES_HOME="~/compose"
+mkdir $PACKAGES_HOME
 
 sudo yum update
 sudo yum install -y docker
@@ -18,51 +19,51 @@ sudo curl -L \
 docker --version
 docker-compose version
 
-cat <<EOF > ~/compose/nginx.conf
+cat <<EOF > $PACKAGES_HOME/nginx.conf
 events { worker_connections 1024; }
 http {
-    upstream app_servers {    # Creo upstream
+    upstream backends {    # Creo upstream
         server server1:80;    # 1
         server server2:80;    # 2
     }
     server {
-        listen 80;
+        listen 8080;
         location / {
-            proxy_pass         http://app_servers;  # Balanceo a mi upstream
+            proxy_pass         http://backends;  # Balanceo a mi upstream
         }
     }
 }
 EOF
 
 # HTML servicios
-cat <<EOF > ~/compose/server1.html
-<html><body>service 1</body></html>
+cat <<EOF > $PACKAGES_HOME/server1.html
+<html><body>backend 1</body></html>
 EOF
-cat <<EOF > ~/compose/server2.html
-<html><body>service 2</body></html>
+cat <<EOF > $PACKAGES_HOME/server2.html
+<html><body>backend 2</body></html>
 EOF
 
 # Docker Compose
-cat <<EOF > ~/compose/docker-compose.yml
+cat <<EOF > $PACKAGES_HOME/docker-compose.yml
 version: '3'
 services:
   # Load Balancer
   nginx:
     image: nginx:1.16.0-alpine
     volumes:
-      - ~/compose/nginx.conf:/etc/nginx/nginx.conf:ro
+      - $PACKAGES_HOME/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "8080:80"
+      - "8080:8080"
   # Servicio 1
   server1:
     image: nginx:1.16.0-alpine
     volumes:
-      - ~/compose/server1.html:/usr/share/nginx/html/index.html
+      - $PACKAGES_HOME/server1.html:/usr/share/nginx/html/index.html
   # Servicio 2
   server2:
     image: nginx:1.16.0-alpine
     volumes:
-      - ~/compose/server2.html:/usr/share/nginx/html/index.html
+      - $PACKAGES_HOME/server2.html:/usr/share/nginx/html/index.html
 EOF
 
 # Run

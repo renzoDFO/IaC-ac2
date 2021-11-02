@@ -12,12 +12,14 @@ resource "aws_security_group" "backend" {
       "0.0.0.0/0"]
   }
   ingress {
-    description = "8080 desde mi frontend"
+    description = "8080 desde internet"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
     security_groups = [
       var.frontend_security_group_name]
+    cidr_blocks = [
+      "0.0.0.0/0"]
   }
   ingress {
     description = "8081 management"

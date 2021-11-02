@@ -54,6 +54,7 @@ resource "aws_instance" "instance" {
   tags = {
     "Name" = "${var.namespace}-EC2-BACKEND"
   }
+  key_name = var.private_key_name
   # Copio la clave SSH a home de ec2user
   provisioner "file" {
     source = "./${var.private_key_name}-key.pem"

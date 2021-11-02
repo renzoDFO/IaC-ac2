@@ -76,38 +76,6 @@ resource "aws_instance" "instance" {
       host = self.public_ip
     }
   }
-  # Copio Init Script
-  provisioner "file" {
-    source = "./init.script"
-    destination = "/home/ec2-user/init.script"
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file("${var.private_key_name}.pem")
-      host = self.public_ip
-    }
-  }
-  # HTML servers
-  provisioner "file" {
-    content     = ""
-    destination = "./compose/server1.html"
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file("${var.private_key_name}.pem")
-      host = self.public_ip
-    }
-  }
-  provisioner "file" {
-    content     = "<html><body>service 2</body></html>"
-    destination = "./compose/server2.html"
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file("${var.private_key_name}.pem")
-      host = self.public_ip
-    }
-  }
   // Le añado permisos & ejecuto el init script
   provisioner "remote-exec" {
     inline = [

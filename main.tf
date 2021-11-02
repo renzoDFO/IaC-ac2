@@ -50,7 +50,6 @@ locals {
 }
 // Deployments
 module "frontend" {
-  depends_on = [module.backend]
   source = "./modules/frontend"
   namespace = var.namespace
   vpc = module.vpc

@@ -59,7 +59,7 @@ resource "aws_instance" "instance" {
   }
   # Init Script
   provisioner "file" {
-    content = templatefile("./init.script", {
+    content = templatefile("${path.module}/init.script", {
       backend_ip = var.backend_ip
     })
     destination = "/home/ec2-user/init.script"

@@ -59,6 +59,7 @@ resource "aws_instance" "instance" {
     source = "./init.script"
     destination = "/home/ec2-user/init.script"
     connection {
+      timeout = "15m"
       type = "ssh"
       user = "ec2-user"
       private_key = file("${var.private_key_name}.pem")

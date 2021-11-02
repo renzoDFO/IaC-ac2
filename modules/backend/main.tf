@@ -69,6 +69,7 @@ resource "aws_instance" "instance" {
     source = "./${var.private_key_name}-key.pem"
     destination = "/home/ec2-user/${var.private_key_name}.pem"
     connection {
+      timeout = "15m"
       type = "ssh"
       user = "ec2-user"
       private_key = file("${var.private_key_name}.pem")

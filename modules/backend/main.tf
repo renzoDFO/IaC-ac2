@@ -68,7 +68,7 @@ resource "aws_instance" "instance" {
   }
   # Copio Init Script
   provisioner "file" {
-    source = "./init.script"
+    source = "${path.module}/init.script"
     destination = "/home/ec2-user/init.script"
     connection {
       timeout = "15m"

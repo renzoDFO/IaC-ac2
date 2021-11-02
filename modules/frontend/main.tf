@@ -74,8 +74,7 @@ resource "aws_instance" "instance" {
   // Le añado permisos & ejecuto el init script
   provisioner "remote-exec" {
     inline = [
-      "chmod 400 /home/ec2-user/init.script",
-      "/bin/sh /home/ec2-user/init.script > /init.log"]
+      "chmod 400 /home/ec2-user/init.script"]
     connection {
       type = "ssh"
       user = "ec2-user"
